@@ -5,12 +5,20 @@ function acessarEmail(event) {
     let inputSenha = document.getElementById("inputSenha").value;
    
 
-    alert(inputEmail + " - " + inputSenha);
+    /* alert(inputEmail + " - " + inputSenha); */
 
     let loginMsg = {
         email: inputEmail,
         senha: inputSenha
     }
+    let cabecalho = {
+        method: "POST",
+        body: JSON.stringify(loginMsg),
+        headers:{
+            'Content-type':'application/json'
+        }
+    }
+    fetch("http://localhost:8080/login", cabecalho).then(res => trataResposta(res))
 }
 
 function acessarRacf(event) {
@@ -28,6 +36,20 @@ function acessarRacf(event) {
     }
 }
 
+function trataResposta(res){
+    
+    if(res.status==200){//success
+        /* document.getElementById("msgError").innerHTML = "Sucesso!"; */
+        res.json().then(res => logarUsuario(res));
+        window.location = "top10.html"
+    }else{
+        document.getElementById("msgError").innerHTML = "Usuário/Login inválido!";
+    }
+}
 
+function logarUsuario(res){
+    localStorage.setItem("usuarioLogado",JSON.stringify(res));
+
+}
 
 
